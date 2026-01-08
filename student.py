@@ -6,7 +6,7 @@ def create_student(surname, name, day, month, year, grade_num, grade_letter):
         "day": day,
         "month": month,
         "year": year,
-        "grade_number": grade_number,
+        "grade_num": grade_num,
         "grade_letter": grade_letter
     }
 

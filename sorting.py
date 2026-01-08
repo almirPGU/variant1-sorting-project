@@ -1,21 +1,24 @@
-# сортировка вставками
+# Сортировка вставками
+def insertion_sort(students, key):
+    # Копия списка, чтобы не изменять исходные данные
+    sorted_students = students[:]
 
-def insertion_sort(arr, key):
-    res = arr[:]  # копия списка, чтобы не менять исходный
+    for index in range(1, len(sorted_students)):
+        # Текущий элемент, который нужно вставить на правильное место
+        current_student = sorted_students[index]
 
-    for i in range(1, len(res)):
-        # сохраняем текущий элемент
-        new_elem = res[i]
+        # Индекс для сравнения с предыдущими элементами
+        previous_index = index - 1
 
-        # начинаем сравнение с предыдущего элемента
-        j = i - 1
+        # Сдвигаем элементы, которые больше текущего
+        while (
+            previous_index >= 0
+            and key(sorted_students[previous_index]) > key(current_student)
+        ):
+            sorted_students[previous_index + 1] = sorted_students[previous_index]
+            previous_index -= 1
 
-        # сдвигаем элементы, которые больше new_elem
-        while j >= 0 and key(res[j]) > key(new_elem):
-            res[j + 1] = res[j]
-            j -= 1
+        # Вставляем элемент на найденную позицию
+        sorted_students[previous_index + 1] = current_student
 
-        # вставляем элемент на нужное место
-        res[j + 1] = new_elem
-
-    return res
+    return sorted_students

@@ -18,6 +18,10 @@ def load_students(filename):
         if len(parts) != 7:
             print(f"Ошибка формата в строке {line_number}")
             return None
+          # Проверяем, что фамилия и имя содержат только буквы
+        if not parts[0].isalpha() or not parts[1].isalpha():
+            print(f"Ошибка имени или фамилии в строке {line_number}")
+            return None
         try:
             # Преобразуем числовые поля
             day = int(parts[2])

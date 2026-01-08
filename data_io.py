@@ -4,14 +4,14 @@ from student import create_student
 def load_students(filename):
     students = []
     try:
-        f = open(filename, encoding='utf-8')
+        file = open(filename, encoding='utf-8')
     except FileNotFoundError:
         print("Не удалось открыть файл students.txt")
         return None
 
-    line_num = 0
-    for line in f:
-        line_num += 1
+    line_number = 0
+    for line in file:
+        line_number += 1
         parts = line.strip().split(";")
 
           # Проверяем корректность количества данных по заданному формату(не больше 7)
@@ -30,13 +30,13 @@ def load_students(filename):
             return None
         # Проверяем диапазоны допустимых значений
         if not (1 <= day <= 31 and 1 <= month <= 12 and 8 <= grade <= 11):
-            print(f"Некорректные данные в строке {line_num}")
+            print(f"Некорректные данные в строке {line_number}")
             return None
 
         students.append(
             create_student(parts[0], parts[1], day, month, year, grade, parts[6])
         )
 
-    f.close()
+    file.close()
 
     return students

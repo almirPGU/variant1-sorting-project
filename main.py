@@ -1,13 +1,14 @@
 from data_io import load_students
 from sorting import insertion_sort
-from student import print_students, create_student
+from student import print_students
+
 
 # Добавляет нового ученика через ввод с клавиатуры
-# и сразу сохраняет его в файл
+# и сохраняет его в файл students.txt
 def add_student(students):
     print("\nДобавление ученика (0 — назад)")
-    # Проверка
-    # Фамилия
+
+    # Ввод фамилии
     while True:
         surname = input("Фамилия: ")
         if surname == "0":
@@ -16,7 +17,7 @@ def add_student(students):
             break
         print("Ошибка: только буквы")
 
-    # Имя
+    # Ввод имени
     while True:
         name = input("Имя: ")
         if name == "0":
@@ -25,81 +26,86 @@ def add_student(students):
             break
         print("Ошибка: только буквы")
 
-    # День
+    # Ввод дня рождения
     while True:
-        day = input("День рождения (1–31): ")
-        if day == "0":
+        day_input = input("День рождения (1–31): ")
+        if day_input == "0":
             return
-        if day.isdigit() and 1 <= int(day) <= 31:
-            day = int(day)
+        if day_input.isdigit() and 1 <= int(day_input) <= 31:
+            day = int(day_input)
             break
         print("Ошибка: число от 1 до 31")
 
-    # Месяц
+    # Ввод месяца рождения
     while True:
-        month = input("Месяц рождения (1–12): ")
-        if month == "0":
+        month_input = input("Месяц рождения (1–12): ")
+        if month_input == "0":
             return
-        if month.isdigit() and 1 <= int(month) <= 12:
-            month = int(month)
+        if month_input.isdigit() and 1 <= int(month_input) <= 12:
+            month = int(month_input)
             break
         print("Ошибка: число от 1 до 12")
 
-    # Год
+    # Ввод года рождения
     while True:
-        year = input("Год рождения: ")
-        if year == "0":
+        year_input = input("Год рождения: ")
+        if year_input == "0":
             return
-        if year.isdigit():
-            year = int(year)
+        if year_input.isdigit():
+            year = int(year_input)
             break
         print("Ошибка: введите год числом")
 
-    # Класс
+    # Ввод номера класса
     while True:
-        grade = input("Класс (8–11): ")
-        if grade == "0":
+        class_input = input("Класс (8–11): ")
+        if class_input == "0":
             return
-        if grade.isdigit() and 8 <= int(grade) <= 11:
-            grade = int(grade)
+        if class_input.isdigit() and 8 <= int(class_input) <= 11:
+            grade_num = int(class_input)
             break
         print("Ошибка: класс от 8 до 11")
 
-    # Буква класса
+    # Ввод буквы класса
     while True:
-        letter = input("Буква класса: ").upper()
-        if letter == "0":
+        grade_letter = input("Буква класса: ").upper()
+        if grade_letter == "0":
             return
-        if letter.isalpha() and len(letter) == 1:
+        if grade_letter.isalpha() and len(grade_letter) == 1:
             break
         print("Ошибка: одна буква")
-     # Формируем словарь ученика
+
+    # Формируем словарь с данными ученика
     student = {
         "surname": surname,
         "name": name,
         "day": day,
         "month": month,
         "year": year,
-        "grade_num": grade,
-        "grade_letter": letter
+        "grade_num": grade_num,
+        "grade_letter": grade_letter
     }
 
     try:
-        # Добавляем запись в конец файла
+        # Записываем нового ученика в файл
         with open("students.txt", "a", encoding="utf-8") as file:
             file.write(
-                f"{surname};{name};{day};{month};{year};{grade};{letter}\n"
+                f"{surname};{name};{day};{month};{year};{grade_num};{grade_letter}\n"
             )
     except OSError:
+        # Обработка ошибки записи в файл
         print("Ошибка записи в файл")
         return
 
+    # Добавляем ученика в список в памяти
     students.append(student)
     print("Ученик добавлен и сохранён")
 
-# Меню поиска учеников по времени года рождения
+
+# Меню вывода учеников, родившихся в указанное время года
 def season_menu(students):
-    months = {
+    # Соответствие времени года и номеров месяцев
+    seasons = {
         "зима": [12, 1, 2],
         "весна": [3, 4, 5],
         "лето": [6, 7, 8],
@@ -114,53 +120,72 @@ def season_menu(students):
         if season == "0":
             return
 
-        if season not in months:
+        if season not in seasons:
             print("Неизвестное время года")
             continue
 
-        filt = [s for s in students if s["month"] in months[season]]
-        res = insertion_sort(filt, lambda s: (s["month"], s["day"], s["surname"]))
-        print_students(res)
+        # Отбираем учеников по месяцу рождения
+        filtered_students = [
+            student for student in students if student["month"] in seasons[season]
+        ]
+
+        # Сортируем по месяцу, дню и фамилии
+        sorted_students = insertion_sort(
+            filtered_students,
+            lambda student: (student["month"], student["day"], student["surname"])
+        )
+
+        print_students(sorted_students)
         return
 
-#cls-class filt-filtration
+
+# Меню вывода учеников одной параллели
 def parallel_menu(students):
     while True:
-        cls = input("\nВведите номер класса (8-11) или 0 для возврата: ")
+        class_input = input("\nВведите номер класса (8–11) или 0 для возврата: ")
 
-        if cls == "0":
+        if class_input == "0":
             return
 
-        if not cls.isdigit():
+        if not class_input.isdigit():
             print("Нужно ввести число")
             continue
 
-        cls = int(cls)
-        if not (8 <= cls <= 11):
+        class_num = int(class_input)
+        if not (8 <= class_num <= 11):
             print("Класс должен быть от 8 до 11")
             continue
 
-        filt = [s for s in students if s["grade_num"] == cls]
-        if not filt:
+        # Отбираем учеников указанного класса
+        filtered_students = [
+            student for student in students if student["grade_num"] == class_num
+        ]
+
+        if not filtered_students:
             print("В этой параллели нет учеников")
             continue
 
-        res = insertion_sort(filt, lambda s: (s["month"], s["day"], s["surname"]))
-        print_students(res)
+        # Сортируем по дате рождения и фамилии
+        sorted_students = insertion_sort(
+            filtered_students,
+            lambda student: (student["month"], student["day"], student["surname"])
+        )
+
+        print_students(sorted_students)
         return
 
 
 def main():
+    # Загружаем данные из файла
     students = load_students("students.txt")
     if students is None:
         return
 
+    # Сообщение, если файл пуст
     if not students:
         print("Файл students.txt пуст. Можно добавить учеников через меню.")
 
     while True:
-        print("------Дни именинника в школе------")
-        print("Допускается добавление вручную в формате (Ф;И;ДД;ММ;ГГГГ;КЛАСС;БУКВА КЛАССА)")
         print("\nГЛАВНОЕ МЕНЮ")
         print("1 - Полный список учеников")
         print("2 - Именинники по времени года")
@@ -168,25 +193,30 @@ def main():
         print("4 - Добавить ученика")
         print("0 - Выход")
 
-        cmd = input("Ваш выбор: ")
+        command = input("Ваш выбор: ")
 
-        if cmd == "1":
-            res = insertion_sort(
+        if command == "1":
+            # Сортировка полного списка по классу и фамилии
+            sorted_students = insertion_sort(
                 students,
-                lambda s: (s["grade_num"], s["grade_letter"], s["surname"])
+                lambda student: (
+                    student["grade_num"],
+                    student["grade_letter"],
+                    student["surname"]
+                )
             )
-            print_students(res)
+            print_students(sorted_students)
 
-        elif cmd == "2":
+        elif command == "2":
             season_menu(students)
 
-        elif cmd == "3":
+        elif command == "3":
             parallel_menu(students)
 
-        elif cmd == "4":
+        elif command == "4":
             add_student(students)
 
-        elif cmd == "0":
+        elif command == "0":
             print("Работа программы завершена")
             break
 
@@ -194,5 +224,6 @@ def main():
             print("Нет такого пункта меню")
 
 
+# Точка входа в программу
 if __name__ == "__main__":
     main()

@@ -16,7 +16,7 @@ def load_students(filename):
 
           # Проверяем корректность количества данных по заданному формату(не больше 7)
         if len(parts) != 7:
-            print(f"Ошибка формата в строке {line_num}")
+            print(f"Ошибка формата в строке {line_number}")
             return None
         try:
             # Преобразуем числовые поля
@@ -26,7 +26,7 @@ def load_students(filename):
             grade = int(parts[5])
         except ValueError:
             # Если преобразование в число не удалось
-            print(f"Ошибка чисел в строке {line_num}")
+            print(f"Ошибка чисел в строке {line_number}")
             return None
         # Проверяем диапазоны допустимых значений
         if not (1 <= day <= 31 and 1 <= month <= 12 and 8 <= grade <= 11):

@@ -2,10 +2,11 @@ from data_io import load_students
 from sorting import insertion_sort
 from student import print_students, create_student
 
-
+# Добавляет нового ученика через ввод с клавиатуры
+# и сразу сохраняет его в файл
 def add_student(students):
     print("\nДобавление ученика (0 — назад)")
-
+    # Проверка
     # Фамилия
     while True:
         surname = input("Фамилия: ")
@@ -72,7 +73,7 @@ def add_student(students):
         if letter.isalpha() and len(letter) == 1:
             break
         print("Ошибка: одна буква")
-
+     # Формируем словарь ученика
     student = {
         "surname": surname,
         "name": name,
@@ -84,6 +85,7 @@ def add_student(students):
     }
 
     try:
+        # Добавляем запись в конец файла
         with open("students.txt", "a", encoding="utf-8") as f:
             f.write(
                 f"{surname};{name};{day};{month};{year};{grade};{letter}\n"
@@ -95,7 +97,7 @@ def add_student(students):
     students.append(student)
     print("Ученик добавлен и сохранён")
 
-
+# Меню поиска учеников по времени года рождения
 def season_menu(students):
     months = {
         "зима": [12, 1, 2],
@@ -121,7 +123,7 @@ def season_menu(students):
         print_students(res)
         return
 
-
+#cls-class filt-filtration
 def parallel_menu(students):
     while True:
         cls = input("\nВведите номер класса (8-11) или 0 для возврата: ")

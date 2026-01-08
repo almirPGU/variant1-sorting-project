@@ -86,8 +86,8 @@ def add_student(students):
 
     try:
         # Добавляем запись в конец файла
-        with open("students.txt", "a", encoding="utf-8") as f:
-            f.write(
+        with open("students.txt", "a", encoding="utf-8") as file:
+            file.write(
                 f"{surname};{name};{day};{month};{year};{grade};{letter}\n"
             )
     except OSError:
